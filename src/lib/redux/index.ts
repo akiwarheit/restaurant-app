@@ -1,23 +1,24 @@
-import {createStore, combineReducers} from 'redux';
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {itemReducer} from '../../domain/item/reducers';
 import {menuReducer} from '../../domain/menu/reducers';
 import {activityReducer} from '../../domain/activity/reducers';
 import Reactotron from '../reactotron';
-import AsyncStorage from '@react-native-community/async-storage';
-import {persistReducer, persistStore} from 'redux-persist';
-
-const persistConfigFactory = (key: string) => ({
-  key,
-  storage: AsyncStorage,
-});
-
-const p = (reducer, key) => persistReducer(persistConfigFactory(key), reducer);
+import {persistStore} from 'redux-persist';
+import createSagaMiddleware from 'redux-saga';
 
 const reducers = combineReducers({
-  items: p(itemReducer, 'item'),
-  menus: p(menuReducer, 'menu'),
-  activity: p(activityReducer, 'activity'),
+  items: itemReducer,
+  menus: menuReducer,
+  activity: activityReducer,
 });
 
-export const Store = createStore(reducers, Reactotron.createEnhancer());
+const sagaEnhancer = applyMiddleware(createSagaMiddleware());
+
+export const Store = createStore(
+  reducers,
+  compose(
+    Reactotron.createEnhancer(),
+    sagaEnhancer,
+  ),
+);
 export const Persistor = persistStore(Store);

@@ -2,11 +2,15 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const slice = createSlice({
   name: 'activity',
-  initialState: false,
+  initialState: {
+    busy: false,
+    error: undefined,
+  },
   reducers: {
-    setBusy: (state, {payload}) => payload,
+    setBusy: (state, {payload: busy}) => ({...state, busy}),
+    setError: (state, {payload: error}) => ({...state, error}),
   },
 });
 
-export const {setBusy} = slice.actions;
+export const {setBusy, setError} = slice.actions;
 export const {reducer: activityReducer} = slice;
