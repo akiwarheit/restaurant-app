@@ -25,6 +25,8 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {Store} from './src/lib/redux';
+import './src/lib/reactotron';
 
 // @ts-ignore
 const isHermes = () => global.HermesInternal !== null;
@@ -32,7 +34,7 @@ const isHermes = () => global.HermesInternal !== null;
 const App = () => {
   return (
     <>
-      <Provider>
+      <Provider store={Store}>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView>
           <ScrollView
